@@ -1,4 +1,3 @@
-import 'package:componentes/src/pages/alert_page.dart';
 import 'package:flutter/material.dart';
 
 class CardPage extends StatelessWidget {
@@ -12,7 +11,7 @@ class CardPage extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(10.0),
         children: [
-          _cardTipo1(),
+          _cardTipo1(context),
           SizedBox(
             height: 30.0,
           ),
@@ -27,7 +26,7 @@ class CardPage extends StatelessWidget {
     );
   }
 
-  Widget _cardTipo1() {
+  Widget _cardTipo1(BuildContext context) {
     return Card(
       elevation: 10.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -42,8 +41,9 @@ class CardPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(onPressed: _mostrarBandera(), child: Text("Cancelar")),
-              TextButton(onPressed: null, child: Text("OK"))
+              TextButton(onPressed: null, child: Text("Cancelar")),
+              TextButton(
+                  onPressed: () => _mostrarBandera(context), child: Text("OK"))
             ],
           )
         ],
@@ -90,13 +90,23 @@ class CardPage extends StatelessWidget {
         ));
   }
 
-  _mostrarBandera() {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      title: Text("Tu bandera:"),
-      content: Column(children: [
-        Image(image: AssetImage("assets/bandera.png")),
-      ]),
-    );
+  _mostrarBandera(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              title: Text("Andalucía"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Image(
+                    image: AssetImage("assets/bandera.png"),
+                  )
+                ],
+              ));
+        });
   }
 }

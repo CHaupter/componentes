@@ -7,15 +7,33 @@ class AvatarPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Avatar Page'),
         centerTitle: true,
+        actions: <Widget>[
+          Container(
+            child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      "https://cdn.dribbble.com/users/11125/screenshots/11342016/bruh_4x.png"),
+                )),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 10.0),
+            child: CircleAvatar(
+              child: GestureDetector(
+                  child: Text("CH"), onTap: () => Navigator.pop(context)),
+              backgroundColor: Colors.red,
+            ),
+          ),
+        ],
       ),
       body: Center(
-        child: Text('Avatar Page'),
+        child: Image(
+          image: AssetImage("assets/bruh_4x.png"),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
+          child: Icon(Icons.access_time_filled),
+          onPressed: () => Navigator.pop(context)),
     );
   }
 }
