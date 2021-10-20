@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class InputPage extends StatefulWidget {
   InputPage({Key? key}) : super(key: key);
@@ -11,6 +12,10 @@ class _InputPageState extends State<InputPage> {
   String _nombre = "";
   String _email = "";
   String _pass = "";
+  String _date = "";
+  TextEditingController _miTextController = TextEditingController();
+  TextEditingController _miTextControllerCopia = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +32,8 @@ class _InputPageState extends State<InputPage> {
             _crearEmail(),
             Divider(),
             _crearPassword(),
+            Divider(),
+            _crearFecha(context),
             Divider(),
             _crearPersona()
           ],
@@ -47,6 +54,7 @@ class _InputPageState extends State<InputPage> {
       ),
       onChanged: (valor) => setState(() {
         _nombre = valor;
+        _miTextControllerCopia.text = _nombre;
       }),
     );
   }
@@ -60,6 +68,7 @@ class _InputPageState extends State<InputPage> {
 
   Widget _crearEmail() {
     return TextField(
+      controller: _miTextControllerCopia,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -89,5 +98,40 @@ class _InputPageState extends State<InputPage> {
         _pass = valor;
       }),
     );
+  }
+
+  Widget _crearFecha(BuildContext context) {
+    return TextField(
+      controller: _miTextController,
+      enableInteractiveSelection: false,
+      keyboardType: TextInputType.visiblePassword,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+        hintText: "Fecha de nacimiento",
+        labelText: "Fecha de nacimiento",
+        suffixIcon: Icon(Icons.perm_contact_calendar),
+        icon: Icon(Icons.calendar_today),
+      ),
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+        _selectDate(context);
+      },
+    );
+  }
+
+  _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: new DateTime.now(),
+      firstDate: new DateTime(2018),
+      lastDate: new DateTime(2025),
+      locale: Locale("es", "ES"),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _miTextController.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
   }
 }
