@@ -11,9 +11,13 @@ class InputPage extends StatefulWidget {
 class _InputPageState extends State<InputPage> {
   String _nombre = "";
   String _email = "";
-  String _pass = "";
-  String _date = "";
+  String _opcionSeleccionada = "Volar";
+  bool _mostrarPass = false;
+
+  List<String> _poderes = ["Volar", "Rayos X", "Super Aliento", "Super fuerza"];
+
   TextEditingController _miTextController = TextEditingController();
+  TextEditingController _miTextControllerPass = TextEditingController();
   TextEditingController _miTextControllerCopia = TextEditingController();
 
   @override
@@ -35,7 +39,13 @@ class _InputPageState extends State<InputPage> {
             Divider(),
             _crearFecha(context),
             Divider(),
-            _crearPersona()
+            _crearDropdown(),
+            Divider(),
+            _crearPersona(),
+            Divider(),
+            _crearBotonPass(),
+            Divider(),
+            _crearCheckBoxPass(),
           ],
         ));
   }
@@ -75,6 +85,7 @@ class _InputPageState extends State<InputPage> {
         hintText: "Correo de la persona",
         labelText: "Correo",
         suffixIcon: Icon(Icons.alternate_email),
+        prefix: Text("Carlos"),
         icon: Icon(Icons.email),
       ),
       onChanged: (valor) => setState(() {
@@ -85,17 +96,16 @@ class _InputPageState extends State<InputPage> {
 
   Widget _crearPassword() {
     return TextField(
-      obscureText: true,
+      obscureText: _mostrarPass,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-        hintText: "Contraseña de la persona",
-        labelText: "Contraseña",
-        suffixIcon: Icon(Icons.lock_open),
-        icon: Icon(Icons.lock),
-      ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+          hintText: "Contraseña de la persona",
+          labelText: "Contraseña",
+          suffixIcon: Icon(Icons.lock_open),
+          icon: Icon(Icons.lock)),
       onChanged: (valor) => setState(() {
-        _pass = valor;
+        _miTextControllerPass.text = valor;
       }),
     );
   }
@@ -130,8 +140,46 @@ class _InputPageState extends State<InputPage> {
 
     if (picked != null) {
       setState(() {
-        _miTextController.text = DateFormat('yyyy-MM-dd').format(picked);
+        _miTextController.text = DateFormat('dd-MM-yyyy').format(picked);
       });
     }
+  }
+
+  List<DropdownMenuItem<String>> getOpcionesDropdown() {
+    List<DropdownMenuItem<String>> lista = [];
+    _poderes.forEach((element) {
+      lista.add(DropdownMenuItem(value: element, child: Text(element)));
+    });
+
+    return lista;
+  }
+
+  Widget _crearDropdown() {
+    return DropdownButton(
+      items: getOpcionesDropdown(),
+      value: _opcionSeleccionada,
+      onChanged: (valor) {
+        setState(() {
+          _opcionSeleccionada = valor.toString();
+        });
+      },
+    );
+  }
+
+  Widget _crearCheckBoxPass() {
+    return Container(
+        child: CheckboxListTile(
+            value: _mostrarPass,
+            onChanged: (valor) => setState(() {
+                  _mostrarPass = valor!;
+                })));
+  }
+
+  Widget _crearBotonPass() {
+    return ElevatedButton(
+        onPressed: () => setState(() {
+              _mostrarPass = !_mostrarPass;
+            }),
+        child: Text("Mostrar/Ocultar Pass"));
   }
 }
