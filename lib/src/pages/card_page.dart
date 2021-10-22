@@ -65,7 +65,7 @@ class CardPage extends StatelessWidget {
           placeholderErrorBuilder: (context, error, stackTrace) =>
               Image(image: AssetImage('assets/1200px-Error.png')),
           height: 300.0,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         ),
         Container(
             padding: EdgeInsets.all(10.0),
